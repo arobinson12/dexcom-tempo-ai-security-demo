@@ -3,6 +3,7 @@ Dexcom Stelo / FDA TEMPO Metabolic AI Coach & Telemetry Portal
 FastAPI Application Entrypoint
 """
 
+import html
 import os
 from fastapi import FastAPI, Request, Query
 from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
@@ -87,11 +88,10 @@ def export_cgm_records(event_type: str = Query("BREAKFAST")):
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    # VULNERABLE CODE PATTERN:
-    query = f"SELECT id, patient_id, timestamp, glucose_value, trend_arrow, event_type, notes FROM cgm_records WHERE event_type = '{event_type}'"
+    query = "SELECT id, patient_id, timestamp, glucose_value, trend_arrow, event_type, notes FROM cgm_records WHERE event_type = ?"
     
     try:
-        cursor.execute(query)
+        cursor.execute(query, (event_type,))
         rows = cursor.fetchall()
         results = [dict(r) for r in rows]
     except Exception as e:
@@ -119,8 +119,8 @@ def oauth_callback(error: Optional[str] = Query(None), code: Optional[str] = Que
     An attacker can pass: ?error=<script>alert('Dexcom XSS')</script>
     """
     if error:
-        # VULNERABLE CODE PATTERN: Unsanitized reflection into HTML response
-        html_content = f"<h3>Dexcom OAuth Authorization Error: {error}</h3>"
+        safe_error = html.escape(error)
+        html_content = f"<h3>Dexcom OAuth Authorization Error: {safe_error}</h3>"
         return HTMLResponse(content=html_content, status_code=400)
 
     return HTMLResponse(

@@ -3,7 +3,6 @@
 > **Executive Workshop Demo:** Enterprise AI Security, Cloud Governance, and Agentic Software Engineering  
 > **Target Audience:** Dexcom Digital Health, Cloud Engineering & Cybersecurity Leadership (San Diego Workshop)  
 > **Platform Stack:** Google Antigravity &bull; CodeMender (`cm` CLI) &bull; Vertex AI Gemini 4 Argon & Gemini 3.8 Flash &bull; GCP Model Armor &bull; Cloud DLP &bull; Cloud Logging  
-> **GCP Project:** `bu2-prod-data` (Project Number: `918024802560`)  
 > **Repository:** `https://github.com/arobinson12/dexcom-tempo-ai-security-demo`
 
 ---
@@ -21,8 +20,8 @@ This repository provides an end-to-end, production-grade reference architecture 
    - **Stage 2 (GCP Model Armor):** Active defense against prompt injection, medical jailbreaks, and indirect insulin dosage poisoning.
    - **Stage 3 (Vertex AI Gemini 4 Argon):** Non-prescriptive metabolic coaching strictly bound against unauthorized insulin dose calculations.
    - **Stage 4 (Cloud Logging):** Structured compliance and audit events streamed directly to Google Cloud Logging and Security Command Center (SCC).
-3. **Act 3: Why Google Antigravity Beats Cursor**:
-   - Why enterprise-governed agentic coding (`AGENTS.md`, reusable security skills in `.agents/skills/`) eliminates the data leakage, prompt drift, and compliance violations inherent to ungoverned client-side tools like Cursor.
+3. **Act 3: Enterprise Agent Governance with Google Antigravity**:
+   - Why enterprise-governed agentic coding (`AGENTS.md`, reusable security skills in `.agents/skills/`) eliminates the data leakage, prompt drift, and compliance violations inherent to ungoverned client-side tools.
 
 ---
 
@@ -136,10 +135,10 @@ Open the web dashboard in your browser (`http://localhost:8080` or the Cloud Run
 
 ---
 
-### Act 3: Why Antigravity Beats Cursor on Enterprise Governance
+### Act 3: Enterprise Governance Architecture with Antigravity
 
 During the workshop, open the following files in your editor:
-1. **`AGENTS.md`**: Shows how Dexcom enforces organization-wide security rules across all developer workspaces. While Cursor relies on easily bypassed local `.cursorrules`, Antigravity rules are hierarchically inherited and auditable.
+1. **`AGENTS.md`**: Shows how Dexcom enforces organization-wide security rules across all developer workspaces. While ungoverned client-side tools rely on easily bypassed local rules files, Antigravity rules are hierarchically inherited and auditable.
 2. **`.agents/skills/dexcom-fda-tempo-guardrails/SKILL.md`**: Demonstrates packaging reusable enterprise security logic into a portable Antigravity Skill so every agent automatically implements DLP and Model Armor guardrails without developer friction.
 
 ---

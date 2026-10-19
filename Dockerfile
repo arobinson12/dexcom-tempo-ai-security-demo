@@ -4,7 +4,6 @@ WORKDIR /app
 
 ENV PYTHONUNBUFFERED=1
 ENV PORT=8080
-ENV GCP_PROJECT=bu2-prod-data
 ENV GCP_LOCATION=us-central1
 ENV MODEL_ARMOR_TEMPLATE=cgm-tempo-coach-guardrail
 

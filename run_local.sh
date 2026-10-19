@@ -5,9 +5,9 @@ set -e
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$DIR"
 
-export GCP_PROJECT="bu2-prod-data"
-export GCP_LOCATION="us-central1"
-export MODEL_ARMOR_TEMPLATE="cgm-tempo-coach-guardrail"
+export GCP_PROJECT="${GCP_PROJECT:-$(gcloud config get-value project 2>/dev/null || echo "")}"
+export GCP_LOCATION="${GCP_LOCATION:-us-central1}"
+export MODEL_ARMOR_TEMPLATE="${MODEL_ARMOR_TEMPLATE:-cgm-tempo-coach-guardrail}"
 
 echo "Initializing database..."
 python3 -m app.db

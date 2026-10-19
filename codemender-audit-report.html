@@ -975,7 +975,7 @@
       </div>
     </div>
     <div class="header-meta">
-      <span>🕒 2026-10-19 16:16:01 UTC</span>
+      <span>🕒 2026-10-19 16:16:59 UTC</span>
       <button class="btn-print" onclick="window.print()">
         <svg style="width:14px;height:14px;fill:currentColor;" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 4v3H4a2 2 0 00-2 2v3a2 2 0 002 2h1v2a2 2 0 002 2h6a2 2 0 002-2v-2h1a2 2 0 002-2V9a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zm0 8H7v4h6v-4z" clip-rule="evenodd"/></svg>
         Print / PDF
@@ -2729,14 +2729,14 @@ This executes arbitrary system commands with the privileges of the running appli
       </div>
     </article>
     
-    <article class="finding-card" data-severity="HIGH" data-status="OPEN">
+    <article class="finding-card" data-severity="HIGH" data-status="EXPLOIT_FAILED">
       <div class="finding-card-header" onclick="toggleCard(this)">
         <div class="card-header-left">
           <span class="severity-pill pill-high">
             <span class="pill-dot"></span>
             HIGH
           </span>
-          <span class="status-pill status-open">OPEN</span>
+          <span class="status-pill status-exploit_failed">EXPLOIT_FAILED</span>
           
           <h3 class="finding-title">Reflected Cross-Site Scripting (XSS) in OAuth Callback Endpoint (/api/v1/oauth/callback)</h3>
         </div>
@@ -2785,20 +2785,7 @@ This executes arbitrary system commands with the privileges of the running appli
             Security Analysis & Impact
           </div>
           <div class="analysis-content">
-            <h3>Vulnerability Overview</h3>
-<p>The <code>/api/v1/oauth/callback</code> endpoint in <code>app/main.py</code> is vulnerable to Reflected Cross-Site Scripting (XSS, CWE-79). When the <code>error</code> query parameter is provided, it is interpolated directly into an HTML string without HTML entity encoding and returned with a <code>text/html</code> content type via <code>HTMLResponse</code>.</p>
-<h3>Data Flow Trace</h3>
-<ul>
-<li><strong>Source</strong>: Untrusted user input enters via the <code>error</code> query parameter in <code>oauth_callback(error: Optional[str] = Query(None), ...)</code> at line 115.</li>
-<li><strong>Sanitization/Validation</strong>: None. The <code>error</code> parameter is not sanitized or escaped (e.g., via <code>html.escape()</code>).</li>
-<li><strong>Sink</strong>: At lines 123-124, <code>error</code> is formatted directly into <code>html_content = f&quot;&lt;h3&gt;Dexcom OAuth Authorization Error: {error}&lt;/h3&gt;&quot;</code> and returned in <code>HTMLResponse(content=html_content, status_code=400)</code>.</li>
-</ul>
-<h3>Conceptual Exploit Payload</h3>
-<p>An attacker can craft a malicious URL containing JavaScript in the <code>error</code> query parameter:</p>
-<pre><code class="language-http">GET /api/v1/oauth/callback?error=%3Cscript%3Ealert%28document.domain%29%3C%2Fscript%3E HTTP/1.1
-Host: localhost:8080
-</code></pre>
-<p>When a victim navigates to <code>/api/v1/oauth/callback?error=&lt;script&gt;alert(document.domain)&lt;/script&gt;</code>, the browser receives <code>&lt;h3&gt;Dexcom OAuth Authorization Error: &lt;script&gt;alert(document.domain)&lt;/script&gt;&lt;/h3&gt;</code> with <code>Content-Type: text/html; charset=utf-8</code> and executes the injected script in the context of the application's origin.</p>
+            <p>Confirmed Reflected Cross-Site Scripting (XSS, CWE-79) in <code>/api/v1/oauth/callback</code> in <code>/workspace/dexcom-tempo-ai-security-demo/app/main.py</code> (lines 114-129). The <code>error</code> query parameter is interpolated directly into <code>html_content = f&quot;&lt;h3&gt;Dexcom OAuth Authorization Error: {error}&lt;/h3&gt;&quot;</code> without HTML entity escaping and returned with <code>HTMLResponse</code> (<code>Content-Type: text/html; charset=utf-8</code>). Verified via standalone <code>.exploit/exploit.sh</code>.</p>
 
           </div>
         </div>
@@ -5815,7 +5802,7 @@ def get_recent_egvs(patient_id: str = &#34;patient_001&#34;, limit: int = 24):
               <td><code>ChBmMTk2</code></td>
               <td><span class="badge-type">FIND</span></td>
               <td><span class="badge-mode">VERIFY</span></td>
-              <td><span class="badge-status">WAITING_FOR_TOOL</span></td>
+              <td><span class="badge-status">COMPLETED</span></td>
               <td><code class="target-path" title="f332928b-91ca-40d7-9800-263c323625fa">f332928b-91ca-40d7-9800-263c323625fa</code></td>
               <td class="time-cell">2026-10-19T16:12:33</td>
             </tr>
@@ -6063,7 +6050,7 @@ def get_recent_egvs(patient_id: str = &#34;patient_001&#34;, limit: int = 24):
 </div>
 
 <footer>
-  <p>🔒 <strong>CodeMender</strong> &middot; Automated Security Analysis &middot; Generated at 2026-10-19 16:16:01 UTC</p>
+  <p>🔒 <strong>CodeMender</strong> &middot; Automated Security Analysis &middot; Generated at 2026-10-19 16:16:59 UTC</p>
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>

@@ -1,16 +1,16 @@
 # Dexcom Enterprise Agentic Coding Rules (FDA Section 524B & HIPAA Guardrails)
 
-> **Antigravity Enterprise Governance Architecture vs. Ungoverned Cursor Workflows**  
+> **Antigravity Enterprise Governance Architecture vs. Ungoverned Local AI Workflows**  
 > *Author:* Dexcom Digital Health Security & Compliance Architecture  
 > *Applies to:* All Antigravity Agents, Subagents, and Developer Workspaces across Dexcom Cloud Projects
 
 ---
 
-## 1. Executive Context: Why Dexcom Standardized on Google Antigravity over Cursor
+## 1. Executive Context: Why Dexcom Standardized on Google Antigravity
 
-| Governance Dimension | Cursor (Ungoverned Local Tool) | Google Antigravity (Gemini Enterprise) |
+| Governance Dimension | Ungoverned Local AI Tools | Google Antigravity (Gemini Enterprise) |
 | :--- | :--- | :--- |
-| **Enterprise Policy Enforcement** | Client-side `.cursorrules` can be ignored, overwritten, or bypassed by developers locally. | **Immutable Organization & Project Rules** enforced hierarchically (`~/.gemini/antigravity` &rarr; Workspace `AGENTS.md`). |
+| **Enterprise Policy Enforcement** | Client-side rules files can be ignored, overwritten, or bypassed by developers locally. | **Immutable Organization & Project Rules** enforced hierarchically (`~/.gemini/antigravity` &rarr; Workspace `AGENTS.md`). |
 | **Medical Device Compliance (FDA 524B)** | No cryptographic audit trail or automated verification of LLM changes against medical safety constraints. | **Deterministic CodeMender Verification (`cm`)** powered by Gemini 4 Argon with automated sandbox regression testing. |
 | **HIPAA PHI Protection** | Raw code and telemetry strings sent un-redacted over arbitrary developer connections. | **Native Cloud DLP Integration** automatically sanitizing PHI infoTypes prior to LLM reasoning. |
 | **Prompt Injection & Adversarial Defense** | Ad-hoc system prompts vulnerable to indirect injection via patient notes or telemetry. | **GCP Model Armor Integration** enforcing centralized confidence-based jailbreak & dosage-poisoning filters. |

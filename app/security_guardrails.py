@@ -19,7 +19,7 @@ from google.auth.transport.requests import Request
 logger = logging.getLogger("dexcom_security_guardrails")
 logger.setLevel(logging.INFO)
 
-PROJECT_ID = os.environ.get("GCP_PROJECT", "bu2-prod-data")
+PROJECT_ID = os.environ.get("GCP_PROJECT") or os.environ.get("GOOGLE_CLOUD_PROJECT", "")
 LOCATION = os.environ.get("GCP_LOCATION", "us-central1")
 MODEL_ARMOR_TEMPLATE = os.environ.get("MODEL_ARMOR_TEMPLATE", "cgm-tempo-coach-guardrail")
 
@@ -37,23 +37,27 @@ _cached_credentials = None
 
 
 def get_gcp_auth_headers():
-    global _cached_credentials
+    global _cached_credentials, PROJECT_ID
     try:
         if _cached_credentials is None or not _cached_credentials.valid:
-            creds, _ = google.auth.default(
+            creds, default_project = google.auth.default(
                 scopes=["https://www.googleapis.com/auth/cloud-platform"]
             )
             creds.refresh(Request())
             _cached_credentials = creds
+            if not PROJECT_ID and default_project:
+                PROJECT_ID = default_project
         else:
             if _cached_credentials.expired:
                 _cached_credentials.refresh(Request())
         token = _cached_credentials.token
-        return {
+        headers = {
             "Authorization": f"Bearer {token}",
-            "X-Goog-User-Project": PROJECT_ID,
             "Content-Type": "application/json"
         }
+        if PROJECT_ID:
+            headers["X-Goog-User-Project"] = PROJECT_ID
+        return headers
     except Exception as e:
         logger.warning(f"Could not load GCP default credentials ({e}). Fallback to local evaluation mode.")
         return None
@@ -281,7 +285,7 @@ def call_vertex_gemini(prompt: str, model_name: str = "gemini-4-argon") -> dict:
             "engine": "gemini-mock"
         }
 
-    # Models supported in global endpoint on project bu2-prod-data
+    # Models supported in global endpoint on Vertex AI
     target_models = [model_name]
     if model_name != "gemini-3.8-flash":
         target_models.append("gemini-3.8-flash")
